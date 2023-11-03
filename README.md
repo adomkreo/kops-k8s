@@ -43,7 +43,7 @@
  ```
 ## 3) Install kops software on an ubuntu instance by running the commands below:
  	sudo apt install wget -y
- 	sudo wget https://github.com/kubernetes/kops/releases/download/v1.22.0/kops-linux-amd64
+ 	sudo wget https://github.com/kubernetes/kops/releases/download/v1.28.0/kops-linux-amd64
  	sudo chmod +x kops-linux-amd64
  	sudo mv kops-linux-amd64 /usr/local/bin/kops
  
@@ -65,7 +65,7 @@ You Created. --> Save.
 
 ## 6) create an S3 bucket
 ## Execute the commands below in your KOPS control Server. use unique s3 bucket name. If you get bucket name exists error.
-	aws s3 mb s3://class30kops
+	aws s3 mb s3://glenburnieahmed
 	aws s3 ls # to verify
 	
  ## 6b) create an S3 bucket    
@@ -74,8 +74,8 @@ You Created. --> Save.
     
        vi .bashrc
 	# Give Unique Name And S3 Bucket which you created.
-	export NAME=class30.k8s.local
-	export KOPS_STATE_STORE=s3://class30kops
+	export NAME=glenburnieahmed.k8s.local
+	export KOPS_STATE_STORE=s3://glenburnieahmed
  
       source .bashrc  
 	
@@ -86,7 +86,7 @@ You Created. --> Save.
 
 # 8) Create kubernetes cluster definitions on S3 bucket
 ```sh
-kops create cluster --zones us-east-1a --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
+kops create cluster --zones us-east-2a --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
 # copy the sshkey into your cluster to be able to access your kubernetes node from the kops server
 kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
 ```
