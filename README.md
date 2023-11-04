@@ -1,7 +1,5 @@
 ## kops-kubernetes-cluster-configuration
-## Landmark Technologies,  -    Landmark Technologies 
-## Tel: +1 437 215 2483,   -     +1 437 215 2483 
-## mylandmarktech@gaIL.com,  -    www.mylandmarktech.com 
+updated
 
 ## Setting up Kubernetes (K8s) Cluster on AWS Using KOPS
 
@@ -24,22 +22,28 @@
 
 ## 2a) create kops user
 ``` sh
+ sudo su
+ mkdir kops
+ cd kops 
  sudo adduser kops
  sudo echo "kops  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/kops
  sudo su - kops
  ```
  ##  2a) install AWSCLI using the apt package manager
   ```sh
- sudo apt install awscli -y 
+ sudo apt install awscli -y (use 2b option)
+
  ```
  ## or 2b) install AWSCLI using the script below
  ```sh
- sudo apt update -y
- sudo apt install unzip wget -y
- sudo curl https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -o awscli-bundle.zip
- sudo apt install unzip python -y
- sudo unzip awscli-bundle.zip
- sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+sudo apt install unzip wget -y
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip wget -y
+sudo unzip awscliv2.zip
+sudo ./aws/install
+sudo apt install unzip python-is-python3 -y
+aws --version
  ```
 ## 3) Install kops software on an ubuntu instance by running the commands below:
  	sudo apt install wget -y
@@ -74,11 +78,13 @@ You Created. --> Save.
     
        vi .bashrc
 	# Give Unique Name And S3 Bucket which you created.
-	export NAME=glenburnieahmed.k8s.local
+	export NAME=kubernetes.smartuniversaldevops.com
 	export KOPS_STATE_STORE=s3://glenburnieahmed
+        
+	source .bashrc  
  
-      source .bashrc  
-	
+ 
+
 ### 7) Create sshkeys before creating cluster
 ```sh
     ssh-keygen
@@ -86,6 +92,9 @@ You Created. --> Save.
 
 # 8) Create kubernetes cluster definitions on S3 bucket
 ```sh
+Create a cluster in AWS in a single zone.
+kops create cluster --name=kubernetes.smartuniversaldevops.com --state=s3://glenburnieahmed --zones=us-east-2a --control-plane-size t2.medium --control-plane-count 1 --node-size t2.medium --node-count=2 ${Name} --kubernetes-version 1.27.7
+
 kops create cluster --zones us-east-2a --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
 # copy the sshkey into your cluster to be able to access your kubernetes node from the kops server
 kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
