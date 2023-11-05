@@ -89,7 +89,7 @@ and chose the same vpc as the kops-server
     
        vi .bashrc
 	# Give Unique Name And S3 Bucket which you created.
-
+        export NAME=glenburnieahmed.smartuniversaldevops.com
 	export KOPS_STATE_STORE=s3://glenburnieahmed
         
 	source .bashrc  
@@ -121,8 +121,8 @@ kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admi
 
 
 # copy the sshkey into your cluster to be able to access your kubernetes node from the kops server
+kops create sshpublickey glenburnieahmed.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
 
-kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
 ```
 # 9) Initialise your kops kubernetes cluser by running the command below
 ```sh
