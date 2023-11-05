@@ -98,13 +98,13 @@ and chose the same vpc as the kops-server
 ### 7) Create sshkeys before creating cluster
 ```sh
     ssh-keygen
+
  ```
 
 # 8) Create kubernetes cluster definitions on S3 bucket
 ```sh
 Create a cluster in AWS in a single zone. #########this only create the cluster definition
-kops create cluster --cloud=aws --zones=us-east-2a --name=glenburnieahmed.smartuniversaldevops.com --dns-zone=smartuniversaldevops.com --dns private
-#######################
+kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.smartuniversaldevops.com --dns-zone=smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7#######################
 Suggestions:
  * list clusters with: kops get cluster
  * edit this cluster with: kops edit cluster glenburnieahmed.smartuniversaldevops.com
@@ -121,8 +121,8 @@ kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admi
 
 
 # copy the sshkey into your cluster to be able to access your kubernetes node from the kops server
-kops create sshpublickey glenburnieahmed.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
 
+kops create sshpublickey glenburnieahmed.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
 ```
 # 9) Initialise your kops kubernetes cluser by running the command below
 ```sh
