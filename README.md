@@ -39,10 +39,10 @@ updated
 
 sudo apt install unzip wget -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-sudo apt install unzip wget -y
 sudo unzip awscliv2.zip
-sudo ./aws/install
 sudo apt install unzip python-is-python3 -y
+sudo ./aws/install
+
 aws --version
  ```
 ## 3) Install kops software on an ubuntu instance by running the commands below:
@@ -53,19 +53,30 @@ aws --version
  
 ## 4) Install kubectl kubernetes client if it is not already installed
 ```sh
- sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
- sudo chmod +x ./kubectl
+ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+sudo chmod +x ./kubectl
  sudo mv ./kubectl /usr/local/bin/kubectl
+ kubectl version --client
 ```
 ## 5) Create an IAM role from AWS Console or CLI with the below Policies. 
 
 	AmazonEC2FullAccess 
+        AmazonRoute53FullAccess
 	AmazonS3FullAccess
 	IAMFullAccess 
 	AmazonVPCFullAccess
+        AmazonSQSFullAccess
+	AmazonEventBridgeFullAccess
 
 Then Attach IAM role to ubuntu server from Console Select KOPS Server --> Actions --> Instance Settings --> Attach/Replace IAM Role --> Select the role which
 You Created. --> Save.
+## 6) create a hosted xone
+smartuniversaldevops.com (for domain name)
+choose private
+choose the same region us-east-2a
+and chose the same vpc as the kops-server
 
 ## 6) create an S3 bucket
 ## Execute the commands below in your KOPS control Server. use unique s3 bucket name. If you get bucket name exists error.
@@ -78,7 +89,7 @@ You Created. --> Save.
     
        vi .bashrc
 	# Give Unique Name And S3 Bucket which you created.
-	export NAME=kubernetes.smartuniversaldevops.com
+
 	export KOPS_STATE_STORE=s3://glenburnieahmed
         
 	source .bashrc  
@@ -92,11 +103,26 @@ You Created. --> Save.
 
 # 8) Create kubernetes cluster definitions on S3 bucket
 ```sh
-Create a cluster in AWS in a single zone.
-kops create cluster --name=kubernetes.smartuniversaldevops.com --state=s3://glenburnieahmed --zones=us-east-2a --control-plane-size t2.medium --control-plane-count 1 --node-size t2.medium --node-count=2 ${Name} --kubernetes-version 1.27.7
+Create a cluster in AWS in a single zone. #########this only create the cluster definition
+kops create cluster --cloud=aws --zones=us-east-2a --name=glenburnieahmed.smartuniversaldevops.com --dns-zone=smartuniversaldevops.com --dns private
+#######################
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster glenburnieahmed.smartuniversaldevops.com
+ * edit your node instance group: kops edit ig --name=glenburnieahmed.smartuniversaldevops.com nodes-us-east-2a
+ * edit your control-plane instance group: kops edit ig --name=glenburnieahmed.smartuniversaldevops.com control-plane-us-east-2a
+Finally configure your cluster with: kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admin
+######################################################
 
-kops create cluster --zones us-east-2a --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
+NOW LETS CREATE THE CLUSTER
+1- EDIT THE INSTANCE GROUP TO CHANCE TO T2.MEDIUM  ALSO THE CONTROL PLANE TO T2.MEDIUM AND AND LEAVE NUMBER OF INSTANCE (1) AND ALSO THE NUMBER OF NODES
+kops edit ig --name=glenburnieahmed.smartuniversaldevops.com control-plane-us-east-2a
+2 AFTER THE CHANGES THEN RUN THIS TO CREATE THE CLUSTER 
+kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admin
+
+
 # copy the sshkey into your cluster to be able to access your kubernetes node from the kops server
+
 kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
 ```
 # 9) Initialise your kops kubernetes cluser by running the command below
