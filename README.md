@@ -23,12 +23,12 @@ updated
 ## 2a) create kops user
 ``` sh
  sudo su
- mkdir kops
+
  cd kops 
  sudo adduser kops
  sudo echo "kops  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/kops
  sudo su - kops
- ```
+ mkdir kops ```
  ##  2a) install AWSCLI using the apt package manager
   ```sh
  sudo apt install awscli -y (use 2b option)
@@ -94,8 +94,7 @@ and chose the same vpc as the kops-server
         
 	source .bashrc  
  
- 
-
+ or vi ~/.profile
 ### 7) Create sshkeys before creating cluster
 ```sh
     ssh-keygen
