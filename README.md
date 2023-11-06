@@ -24,11 +24,13 @@ updated
 ``` sh
  sudo su
 
- cd kops 
+ 
  sudo adduser kops
  sudo echo "kops  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/kops
  sudo su - kops
- mkdir kops ```
+ mkdir kops
+ cd kops
+ ```
  ##  2a) install AWSCLI using the apt package manager
   ```sh
  sudo apt install awscli -y (use 2b option)
