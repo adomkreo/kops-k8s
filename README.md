@@ -79,7 +79,7 @@ and chose the same vpc as the kops-server (kops-bootstrap)
 
 ## 6) create an S3 bucket
 ## Execute the commands below in your KOPS control Server. use unique s3 bucket name. If you get bucket name exists error.
-	aws s3 mb s3:/glenburnieahmed
+	aws s3 mb s3://glenburnieahmed
 	aws s3 ls # to verify
 	
  ## 6b) create an S3 bucket    
@@ -102,7 +102,7 @@ Expose environment variable:
 ```sh
 ### Create a cluster in AWS in a single zone.
 ###This only create the cluster definition
-kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7
+kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7
 
 ######################################################
 Suggestions: to edit instance type, size, and others
