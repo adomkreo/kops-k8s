@@ -22,21 +22,13 @@ updated
 
 ## 2a) create kops user
 ``` sh
- sudo su
-
  
  sudo adduser kops
  sudo echo "kops  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/kops
  sudo su - kops
- mkdir kops
- cd kops
- ```
- ##  2a) install AWSCLI using the apt package manager
-  ```sh
- sudo apt install awscli -y (use 2b option)
 
  ```
- ## or 2b) install AWSCLI using the script below
+ ## 2) install AWSCLI version 2  using the script below
  ```sh
 
 sudo apt install unzip wget -y
@@ -47,7 +39,7 @@ sudo ./aws/install
 
 aws --version
  ```
-## 3) Install kops software on an ubuntu instance by running the commands below:
+## 3) Install kops version v1.28 software on an ubuntu instance by running the commands below:
  	sudo apt install wget -y
  	sudo wget https://github.com/kubernetes/kops/releases/download/v1.28.0/kops-linux-amd64
  	sudo chmod +x kops-linux-amd64
@@ -55,12 +47,12 @@ aws --version
  
 ## 4) Install kubectl kubernetes client if it is not already installed
 ```sh
- curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 sudo chmod +x ./kubectl
- sudo mv ./kubectl /usr/local/bin/kubectl
- kubectl version --client
+sudo mv ./kubectl /usr/local/bin/kubectl
+kubectl version --client
 ```
 ## 5) Create an IAM role from AWS Console or CLI with the below Policies. 
 
@@ -71,66 +63,64 @@ sudo chmod +x ./kubectl
 	AmazonVPCFullAccess
         AmazonSQSFullAccess
 	AmazonEventBridgeFullAccess
-#####in case the above doesnt work.
-go to conole, create a user give the policies, then create an access key and secret key. after that. go back to command line
+ 
+########### 5-optional---we can create access key and secret and export them.
+Go to conole, create a user give the policies, 
+Then create an access key and secret key. 
+After that. go back to command line
 run aws configure, pass the values. here i chosed Json for output values.
 Then Attach IAM role to ubuntu server from Console Select KOPS Server --> Actions --> Instance Settings --> Attach/Replace IAM Role --> Select the role which
 You Created. --> Save.
-## 6) create a hosted xone
-smartuniversaldevops.com (for domain name)
+## 6) create a hosted Zone
+kubernetes.smartuniversaldevops.com 
 choose private
 choose the same region us-east-2a
-and chose the same vpc as the kops-server
+and chose the same vpc as the kops-server (kops-bootstrap)
 
 ## 6) create an S3 bucket
 ## Execute the commands below in your KOPS control Server. use unique s3 bucket name. If you get bucket name exists error.
-	aws s3 mb s3://glenburnieahmed
+	aws s3 mb s3:/glenburnieahmed
 	aws s3 ls # to verify
 	
  ## 6b) create an S3 bucket    
-	Expose environment variable:
-    # Add env variables in bashrc
+Expose environment variable:
+# Add env variables in bashrc
     
        vi .bashrc
 	# Give Unique Name And S3 Bucket which you created.
-        export NAME=glenburnieahmed.smartuniversaldevops.com
+        export NAME=glenburnieahmed.kubernetes.smartuniversaldevops.com
 	export KOPS_STATE_STORE=s3://glenburnieahmed
-        
 	source .bashrc  
  
- or vi ~/.profile
 ### 7) Create sshkeys before creating cluster
 ```sh
     ssh-keygen
 
  ```
 
-# 8) Create kubernetes cluster definitions on S3 bucket
+# 8) Create kubernetes cluster v1.27.7 definitions on S3 bucket
 ```sh
-Create a cluster in AWS in a single zone. #########this only create the cluster definition
-kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.smartuniversaldevops.com --dns-zone=smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7#######################
-Suggestions:
+### Create a cluster in AWS in a single zone.
+###This only create the cluster definition
+kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7
+
+######################################################
+Suggestions: to edit instance type, size, and others
  * list clusters with: kops get cluster
  * edit this cluster with: kops edit cluster glenburnieahmed.smartuniversaldevops.com
- * edit your node instance group: kops edit ig --name=glenburnieahmed.smartuniversaldevops.com nodes-us-east-2a
- * edit your control-plane instance group: kops edit ig --name=glenburnieahmed.smartuniversaldevops.com control-plane-us-east-2a
-Finally configure your cluster with: kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admin
+ * edit your node instance group: kops edit ig --name=glenburnieahmed.kubernetes.smartuniversaldevops.com nodes-us-east-2a
+ * edit your control-plane instance group: kops edit ig --name=glenburnieahmed.kubernetes.smartuniversaldevops.com control-plane-us-east-2a
+Finally configure your cluster with: kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
 ######################################################
 
-NOW LETS CREATE THE CLUSTER
-1- EDIT THE INSTANCE GROUP TO CHANCE TO T2.MEDIUM  ALSO THE CONTROL PLANE TO T2.MEDIUM AND AND LEAVE NUMBER OF INSTANCE (1) AND ALSO THE NUMBER OF NODES
-kops edit ig --name=glenburnieahmed.smartuniversaldevops.com control-plane-us-east-2a
-2 AFTER THE CHANGES THEN RUN THIS TO CREATE THE CLUSTER
-##############################
-before runing update , make sure to add key
-kops create sshpublickey glenburnieahmed.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
-kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admin
+############NOW LETS ADD THE KEY PREVIOUSLY CREATED BEFORE WE CREATE THE CLUSTER###############
+kops create sshpublickey glenburnieahmed.kubernetes.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
 
-```
-# 9) Initialise your kops kubernetes cluser by running the command below
-```sh
-kops update cluster ${NAME} --yes
-```
+###################################CLUSTER CREATING######################################
+kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
+
+#########################END##############################
+
 # 10a) Validate your cluster(KOPS will take some time to create cluster ,Execute below commond after 3 or 4 mins)
 
 kops validate cluster
