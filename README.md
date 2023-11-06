@@ -71,7 +71,9 @@ sudo chmod +x ./kubectl
 	AmazonVPCFullAccess
         AmazonSQSFullAccess
 	AmazonEventBridgeFullAccess
-
+#####in case the above doesnt work.
+go to conole, create a user give the policies, then create an access key and secret key. after that. go back to command line
+run aws configure, pass the values. here i chosed Json for output values.
 Then Attach IAM role to ubuntu server from Console Select KOPS Server --> Actions --> Instance Settings --> Attach/Replace IAM Role --> Select the role which
 You Created. --> Save.
 ## 6) create a hosted xone
