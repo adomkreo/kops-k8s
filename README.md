@@ -120,13 +120,12 @@ Finally configure your cluster with: kops update cluster --name glenburnieahmed.
 NOW LETS CREATE THE CLUSTER
 1- EDIT THE INSTANCE GROUP TO CHANCE TO T2.MEDIUM  ALSO THE CONTROL PLANE TO T2.MEDIUM AND AND LEAVE NUMBER OF INSTANCE (1) AND ALSO THE NUMBER OF NODES
 kops edit ig --name=glenburnieahmed.smartuniversaldevops.com control-plane-us-east-2a
-2 AFTER THE CHANGES THEN RUN THIS TO CREATE THE CLUSTER 
+2 AFTER THE CHANGES THEN RUN THIS TO CREATE THE CLUSTER
+##############################
+before runing update , make sure to add key
+kops create sshpublickey glenburnieahmed.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
 kops update cluster --name glenburnieahmed.smartuniversaldevops.com --yes --admin
 
-
-# copy the sshkey into your cluster to be able to access your kubernetes node from the kops server
-
-kops create sshpublickey glenburnieahmed.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
 ```
 # 9) Initialise your kops kubernetes cluser by running the command below
 ```sh
