@@ -98,13 +98,13 @@ Expose environment variable:
 
  ```
 
-# 8) Create kubernetes cluster v1.27.7 definitions on S3 bucket
+# 8) Create kubernetes cluster v1.27.7 9WE ARE NOT USING THIS VERSION BECAUSE IT IS NOT COMPATIBLE WITH RANCHER SO WE CHOOSE V1.23.17 INSTEAD definitions on S3 bucket
 ```sh
 ### Create a cluster in AWS in a single zone.
 ###This only create the cluster definition
-kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7
+kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.23.17
 #####################v1.27.7 doesnt support rancher######
-to donwgrade, just chnage edit the cluster using suggestion like i did here, changing the version to v1.24.12 to support rancher
+to donwgrade, just chnage edit the cluster using suggestion like i did here, changing the version to v1.23.17 to support rancher
 then run   kops rolling-update cluster --yes
 ##############################
 ######################################################
