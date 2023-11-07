@@ -103,11 +103,14 @@ Expose environment variable:
 ### Create a cluster in AWS in a single zone.
 ###This only create the cluster definition
 kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.27.7
-
+#####################v1.27.7 doesnt support rancher######
+to donwgrade, just chnage edit the cluster using suggestion like i did here, changing the version to v1.24.12 to support rancher
+then run   kops rolling-update cluster --yes
+##############################
 ######################################################
 Suggestions: to edit instance type, size, and others
  * list clusters with: kops get cluster
- * edit this cluster with: kops edit cluster glenburnieahmed.smartuniversaldevops.com
+ * edit this cluster with: kops edit cluster glenburnieahmed.kubernetes.smartuniversaldevops.com
  * edit your node instance group: kops edit ig --name=glenburnieahmed.kubernetes.smartuniversaldevops.com nodes-us-east-2a
  * edit your control-plane instance group: kops edit ig --name=glenburnieahmed.kubernetes.smartuniversaldevops.com control-plane-us-east-2a
 Finally configure your cluster with: kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
