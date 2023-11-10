@@ -121,7 +121,8 @@ kops create sshpublickey glenburnieahmed.kubernetes.smartuniversaldevops.com -i 
 
 ###################################CLUSTER CREATING######################################
 kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
-
+###################
+use this after an update: kops rolling-update cluster --cloudonly --yes
 #########################END##############################
 
 # 10a) Validate your cluster(KOPS will take some time to create cluster ,Execute below commond after 3 or 4 mins)
