@@ -132,7 +132,7 @@ kops create sshpublickey devops2025.kubernetes.smartuniversaldevops.com \
 
 
 ###################################CLUSTER CREATING######################################
-kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
+kops update cluster --name devops2025.kubernetes.smartuniversaldevops.com --yes --admin
 ###################
 use this after an update: kops rolling-update cluster --cloudonly --yes
 #########################END##############################
