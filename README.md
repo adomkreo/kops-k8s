@@ -44,6 +44,11 @@ aws --version
  	sudo wget https://github.com/kubernetes/kops/releases/download/v1.28.0/kops-linux-amd64
  	sudo chmod +x kops-linux-amd64
  	sudo mv kops-linux-amd64 /usr/local/bin/kops
+  #may need to upgrade kops
+  curl -Lo kops https://github.com/kubernetes/kops/releases/download/v1.30.3/kops-linux-amd64
+chmod +x kops
+sudo mv kops /usr/local/bin/
+
  
 ## 4) Install kubectl kubernetes client if it is not already installed
 ```sh
@@ -102,10 +107,15 @@ Expose environment variable:
 ```sh
 ### Create a cluster in AWS in a single zone.
 ###This only create the cluster definition
-kops create cluster --cloud=aws --state=s3://glenburnieahmed --zones=us-east-2a --node-count=2 --node-size=t2.medium --control-plane-size=t2.medium --control-plane-count=1 --name=glenburnieahmed.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.23.17
+kops create cluster --cloud=aws --state=s3://devops2025 --zones=us-east-1a --node-count=2 --node-size=t3.medium --control-plane-size=t3.medium --control-plane-count=1 --name=devops2025.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.32.8
 #####################v1.27.7 doesnt support rancher######
+
+#may need to upgrade cluster
+kops upgrade cluster devops2025.kubernetes.smartuniversaldevops.com --yes --state=s3://devops2025
 to donwgrade, just chnage edit the cluster using suggestion like i did here, changing the version to v1.23.17 to support rancher
 then run   kops rolling-update cluster --yes
+
+
 ##############################
 ######################################################
 Suggestions: to edit instance type, size, and others
