@@ -127,7 +127,9 @@ Finally configure your cluster with: kops update cluster --name glenburnieahmed.
 ######################################################
 
 ############NOW LETS ADD THE KEY PREVIOUSLY CREATED BEFORE WE CREATE THE CLUSTER###############
-kops create sshpublickey glenburnieahmed.kubernetes.smartuniversaldevops.com -i /home/kops/.ssh/id_rsa.pub
+kops create sshpublickey devops2025.kubernetes.smartuniversaldevops.com \
+  -i /home/kops/.ssh/id_ed25519.pub
+
 
 ###################################CLUSTER CREATING######################################
 kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
