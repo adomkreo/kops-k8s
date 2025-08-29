@@ -110,13 +110,27 @@ Expose environment variable:
 kops create cluster --cloud=aws --state=s3://devops2025 --zones=us-east-1a --node-count=2 --node-size=t3.medium --control-plane-size=t3.medium --control-plane-count=1 --name=devops2025.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.28.15
 #####################v1.27.7 doesnt support rancher######
 
-#may need to upgrade cluster #######DO NOT RUN IT"
+
+############NOW LETS ADD THE KEY PREVIOUSLY CREATED BEFORE WE CREATE THE CLUSTER###############
+kops create sshpublickey devops2025.kubernetes.smartuniversaldevops.com \
+  -i /home/kops/.ssh/id_ed25519.pub
+
+
+###################################CLUSTER CREATING######################################
+kops update cluster --name devops2025.kubernetes.smartuniversaldevops.com --yes --admin
+
+
+################################################Cluster Validation#################
+
+# 10a) Validate your cluster(KOPS will take some time to create cluster ,Execute below commond after 3 or 4 mins)
+
+kops validate cluster
+
+###############may need to upgrade cluster #######DO NOT RUN IT"#####################
 kops upgrade cluster devops2025.kubernetes.smartuniversaldevops.com --yes --state=s3://devops2025
 to donwgrade, just chnage edit the cluster using suggestion like i did here, changing the version to v1.23.17 to support rancher
 then run   kops rolling-update cluster --yes
 
-
-##############################
 ######################################################
 Suggestions: to edit instance type, size, and others
  * list clusters with: kops get cluster
@@ -126,27 +140,11 @@ Suggestions: to edit instance type, size, and others
 Finally configure your cluster with: kops update cluster --name glenburnieahmed.kubernetes.smartuniversaldevops.com --yes --admin
 ######################################################
 
-############NOW LETS ADD THE KEY PREVIOUSLY CREATED BEFORE WE CREATE THE CLUSTER###############
-kops create sshpublickey devops2025.kubernetes.smartuniversaldevops.com \
-  -i /home/kops/.ssh/id_ed25519.pub
 
-
-###################################CLUSTER CREATING######################################
-kops update cluster --name devops2025.kubernetes.smartuniversaldevops.com --yes --admin
 ###################
 use this after an update: kops rolling-update cluster --cloudonly --yes
 #########################END##############################
 
-# 10a) Validate your cluster(KOPS will take some time to create cluster ,Execute below commond after 3 or 4 mins)
-
-kops validate cluster
-	   
-	   Suggestions:
- * validate cluster: kops validate cluster --wait 10m
- * list nodes: kubectl get nodes --show-labels
- * ssh to the master: ssh -i ~/.ssh/id_rsa ubuntu@api.class.k8s.local
- * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
- * read about installing addons at: https://kops.sigs.k8s.io/operations/addons.
 
 ## 10b - Export the kubeconfig file to manage your kubernetes cluster from a remote server. For this demo, Our remote server shall be our kops server 
 ```sh
