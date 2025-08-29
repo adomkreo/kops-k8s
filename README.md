@@ -110,7 +110,7 @@ Expose environment variable:
 kops create cluster --cloud=aws --state=s3://devops2025 --zones=us-east-1a --node-count=2 --node-size=t3.medium --control-plane-size=t3.medium --control-plane-count=1 --name=devops2025.kubernetes.smartuniversaldevops.com --dns-zone=kubernetes.smartuniversaldevops.com --dns private --kubernetes-version=v1.28.15
 #####################v1.27.7 doesnt support rancher######
 
-#may need to upgrade cluster
+#may need to upgrade cluster #######DO NOT RUN IT"
 kops upgrade cluster devops2025.kubernetes.smartuniversaldevops.com --yes --state=s3://devops2025
 to donwgrade, just chnage edit the cluster using suggestion like i did here, changing the version to v1.23.17 to support rancher
 then run   kops rolling-update cluster --yes
